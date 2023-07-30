@@ -1,4 +1,9 @@
+from freezegun import freeze_time
+from pytest_freezegun import pytest
+
 from fast_api.schemas import UserPublic
+
+# CREATE USER
 
 
 def test_create_user(client):
@@ -33,6 +38,9 @@ def test_create_user_returns_400_when_user_already_exists(client, user):
     assert response.json() == {'detail': 'Username already registered'}
 
 
+# LIST USER
+
+
 def test_list_users(client, user):
     user_schema = UserPublic.model_validate(user).model_dump()
     response = client.get('/users/')
@@ -40,9 +48,12 @@ def test_list_users(client, user):
     assert response.json() == {'users': [user_schema]}
 
 
+# UPDATE USER
+
+
 def test_update_user(client, user, token):
     response = client.put(
-        '/users/1',
+        f'/users/{user.id}',
         headers={'Authorization': f'Bearer {token}'},
         json={
             'username': 'peter',
@@ -54,7 +65,7 @@ def test_update_user(client, user, token):
     assert response.json() == {
         'username': 'peter',
         'email': 'peter@parker.com',
-        'id': 1,
+        'id': user.id,
     }
 
 
@@ -71,9 +82,26 @@ def test_update_user_returns_401_when_token_invalid(client, user):
     assert response.json() == {'detail': 'Not authenticated'}
 
 
+def test_update_user_with_wrong_auth(client, user, user2, token):
+    response = client.put(
+        f'/users/{user2.id}',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            'username': 'miles',
+            'email': 'miles@morales.com',
+            'password': 'spidey',
+        },
+    )
+    assert response.status_code == 400
+    assert response.json() == {'detail': 'Not enough permissions'}
+
+
+# DELETE USER
+
+
 def test_delete_user(client, user, token):
     response = client.delete(
-        '/users/1', headers={'Authorization': f'Bearer {token}'}
+        f'/users/{user.id}', headers={'Authorization': f'Bearer {token}'}
     )
     assert response.status_code == 200
     assert response.json() == {'detail': 'User deleted'}
@@ -83,3 +111,23 @@ def test_delete_user_returns_401_when_token_invalid(client, user):
     response = client.delete('/users/9999')
     assert response.status_code == 401
     assert response.json() == {'detail': 'Not authenticated'}
+
+
+def test_delete_user_with_wrong_auth(client, user, user2, token):
+    response = client.delete(
+        f'/users/{user2.id}', headers={'Authorization': f'Bearer {token}'}
+    )
+    assert response.status_code == 400
+    assert response.json() == {'detail': 'Not enough permissions'}
+
+
+@pytest.mark.freeze_time('2023-07-14 12:00:00')
+def test_token_expiry(client, user, token):
+    with freeze_time('2023-07-14 12:31:00'):
+        response = client.delete(
+            f'/users/{user.id}',
+            headers={'Authorization': f'Bearer {token}'},
+        )
+
+    assert response.status_code == 401
+    assert response.json() == {'detail': 'Could not validate credentials'}
