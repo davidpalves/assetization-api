@@ -40,9 +40,10 @@ def test_list_users(client, user):
     assert response.json() == {'users': [user_schema]}
 
 
-def test_update_user(client, user):
+def test_update_user(client, user, token):
     response = client.put(
         '/users/1',
+        headers={'Authorization': f'Bearer {token}'},
         json={
             'username': 'peter',
             'email': 'peter@parker.com',
@@ -57,7 +58,7 @@ def test_update_user(client, user):
     }
 
 
-def test_update_user_returns_404_when_user_does_not_exist(client, user):
+def test_update_user_returns_401_when_token_invalid(client, user):
     response = client.put(
         '/users/9999',
         json={
@@ -66,17 +67,19 @@ def test_update_user_returns_404_when_user_does_not_exist(client, user):
             'password': 'spiderman',
         },
     )
-    assert response.status_code == 404
-    assert response.json() == {'detail': 'User not found'}
+    assert response.status_code == 401
+    assert response.json() == {'detail': 'Not authenticated'}
 
 
-def test_delete_user(client, user):
-    response = client.delete('/users/1')
+def test_delete_user(client, user, token):
+    response = client.delete(
+        '/users/1', headers={'Authorization': f'Bearer {token}'}
+    )
     assert response.status_code == 200
     assert response.json() == {'detail': 'User deleted'}
 
 
-def test_delete_user_returns_404_when_user_does_not_exist(client, user):
+def test_delete_user_returns_401_when_token_invalid(client, user):
     response = client.delete('/users/9999')
-    assert response.status_code == 404
-    assert response.json() == {'detail': 'User not found'}
+    assert response.status_code == 401
+    assert response.json() == {'detail': 'Not authenticated'}
