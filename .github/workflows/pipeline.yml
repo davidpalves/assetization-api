@@ -17,7 +17,7 @@ jobs:
           envkey_ENVIRONMENT: ${{ vars.ENVIRONMENT }}
           envkey_ALGORITHM: ${{ vars.ALGORITHM }}
           envkey_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ vars.ACCESS_TOKEN_EXPIRE_MINUTES || 30 }}
-          file_name: .env
+          file_name: .env.prod
           fail_on_empty: false
           sort_keys: false
 
@@ -34,6 +34,7 @@ jobs:
 
       - name: Format code
         run: |
+          echo "DATABASE URL: $vars.DATABASE_URL"
           poetry run task format
         continue-on-error: true
 
