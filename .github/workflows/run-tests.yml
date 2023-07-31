@@ -31,9 +31,9 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Lint with Ruff
+      - name: Format code
         run: |
-          poetry run ruff --format=github --target-version=py37 .
+          poetry run task format
         continue-on-error: true
 
       - name: Run tests
