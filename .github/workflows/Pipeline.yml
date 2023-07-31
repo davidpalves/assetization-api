@@ -1,4 +1,4 @@
-name: Pipeline
+name: Run Tests
 on: [push, pull_request]
 
 jobs:
@@ -9,11 +9,12 @@ jobs:
       - name: Copia os arquivos do repo
         uses: actions/checkout@v3
 
-      - name: Do Something with env files
+      - name: Cria arquivo .env
         env:
-          PROD_ENV_FILE: ${{ secrets.PROD_ENV_FILE }}
+          PROD_ENV_FILE: ${{ secrets.QA_ENV_FILE }}
         run: |
-          echo $PROD_ENV_FILE | base64 --decode > .env
+          echo $QA_ENV_FILE | base64 --decode > .env
+          cat .env
 
       - name: Instalar o python
         uses: actions/setup-python@v4
