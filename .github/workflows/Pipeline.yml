@@ -14,7 +14,7 @@ jobs:
         with:
           envkey_DEBUG: false
           envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          envkey_DATABASE_URL: ${{ vars.DATABASE_URL }}
+          envkey_DATABASE_URL: "sqlite:///database.db"
           envkey_ALGORITHM: ${{ vars.ALGORITHM }}
           envkey_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ vars.ACCESS_TOKEN_EXPIRE_MINUTES || 30 }}
           file_name: .env
