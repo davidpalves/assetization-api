@@ -14,7 +14,7 @@ jobs:
           PROD_ENV_FILE: ${{ secrets.QA_ENV_FILE }}
         run: |
           echo $QA_ENV_FILE | base64 --decode > .env
-          cat .env
+          cat .env >> $GITHUB_OUTPUT
 
       - name: Instalar o python
         uses: actions/setup-python@v4
