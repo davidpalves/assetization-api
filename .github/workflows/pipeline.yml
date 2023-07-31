@@ -33,9 +33,7 @@ jobs:
         run: poetry install
 
       - name: Format code
-        run: |
-          echo "DATABASE URL: $vars.DATABASE_URL"
-          poetry run task format
+        run: poetry run task format
         continue-on-error: true
 
       - name: Run tests

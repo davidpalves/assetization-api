@@ -4,6 +4,7 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 RUN pip install poetry
 
 COPY . .
+COPY .env.prod .env.prod
 
 RUN apt update && apt-get install -y python3-dev \
                         gcc \
