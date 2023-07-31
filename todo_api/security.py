@@ -22,12 +22,12 @@ def create_access_token(data: dict):
     to_encode = data.copy()
 
     expire = datetime.utcnow() + timedelta(
-        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+        minutes=settings().ACCESS_TOKEN_EXPIRE_MINUTES
     )
     to_encode.update({'exp': expire})
 
     encoded_jwt = jwt.encode(
-        to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
+        to_encode, settings().SECRET_KEY, algorithm=settings().ALGORITHM
     )
     return encoded_jwt
 
@@ -52,7 +52,7 @@ async def get_current_user(
 
     try:
         payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            token, settings().SECRET_KEY, algorithms=[settings().ALGORITHM]
         )
         username: str = payload.get('sub')
         if not username:

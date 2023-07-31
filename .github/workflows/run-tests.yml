@@ -13,8 +13,8 @@ jobs:
         uses: SpicyPizza/create-envfile@v2.0.2
         with:
           envkey_DATABASE_URL: "sqlite:///database.db"
-          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          envkey_ALGORITHM: ${{ vars.ALGORITHM }}
+          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY || 'ultra-secret-key'}}
+          envkey_ALGORITHM: ${{ vars.ALGORITHM || 'HS256'}}
           envkey_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ vars.ACCESS_TOKEN_EXPIRE_MINUTES || 30 }}
           file_name: .env
           fail_on_empty: false
