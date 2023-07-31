@@ -6,20 +6,22 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Copy repo files
+      - name: Copy repo's file
         uses: actions/checkout@v3
 
       - name: Create .env file
         uses: SpicyPizza/create-envfile@v2.0.2
         with:
-          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY || 'secret-key' }}
+          envkey_DEBUG: false
+          envkey_DATABASE_URL: "sqlite:///database.db"
+          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
           envkey_ALGORITHM: ${{ vars.ALGORITHM }}
-          envkey_ACCESS_TOKEN_EXPIRE_MINUTES: 30
+          envkey_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ vars.ACCESS_TOKEN_EXPIRE_MINUTES || 30 }}
           file_name: .env
           fail_on_empty: false
           sort_keys: false
 
-      - name: Install Python
+      - name: Install python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11.1'
@@ -27,18 +29,19 @@ jobs:
       - name: Install Poetry
         run: pip install poetry
 
-      - name: Instalar dependências do projeto
+      - name: Install dependencies
         run: poetry install
 
       - name: Lint with Ruff
         run: |
-          poetry run ruff --format=github --target-version=py37 .
+          pip install ruff
+          ruff --format=github --target-version=py37 .
         continue-on-error: true
 
       - name: Run tests
         run: poetry run task test --cov-report=xml
 
-      - name: Subir cobertura para o codecov
+      - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
