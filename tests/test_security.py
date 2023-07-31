@@ -1,7 +1,7 @@
 from jose import jwt
 
-from fast_api.security import create_access_token
-from fast_api.settings import Settings
+from todo_api.security import create_access_token
+from todo_api.settings import Settings
 
 
 def test_jwt():

@@ -1,6 +1,7 @@
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 
-from fast_api.models import User
+from todo_api.models import Todo, User
 
 
 def test_create_user(session):
@@ -13,3 +14,20 @@ def test_create_user(session):
     user = session.scalar(select(User).where(User.username == 'miles'))
 
     assert user.username == 'miles'
+
+
+def test_create_todo(session: Session, user: User):
+    todo = Todo(
+        title='Test Todo',
+        description='Test Desc',
+        state='draft',
+        user_id=user.id,
+    )
+
+    session.add(todo)
+    session.commit()
+    session.refresh(todo)
+
+    user = session.scalar(select(User).where(User.id == user.id))
+
+    assert todo in user.todos

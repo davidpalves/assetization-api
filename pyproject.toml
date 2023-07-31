@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["David Pierre <davidpierrealves21@gmail.com>"]
 readme = "README.md"
-packages = [{include = "fast_api"}]
+packages = [{include = "todo_api"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -49,9 +49,9 @@ extend-exclude = '(migrations/)'
 [tool.taskipy.tasks]
 lint = 'ruff . && blue --check . --diff'
 format = 'blue .  && isort .'
-run = 'uvicorn fast_api.app:app --reload'
+run = 'uvicorn todo_api.app:app --reload'
 pre_test = 'task lint'
-test = 'pytest -s -x --cov=fast_api -vv'
+test = 'pytest -s -x --cov=todo_api -vv'
 post_test = 'coverage html'
 
 [build-system]

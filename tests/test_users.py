@@ -1,7 +1,7 @@
 from freezegun import freeze_time
 from pytest_freezegun import pytest
 
-from fast_api.schemas import UserPublic
+from todo_api.schemas import UserPublic
 
 # CREATE USER
 

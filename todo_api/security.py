@@ -7,10 +7,10 @@ from passlib.context import CryptContext
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from fast_api.database import get_session
-from fast_api.models import User
-from fast_api.schemas import TokenData
-from fast_api.settings import Settings
+from todo_api.database import get_session
+from todo_api.models import User
+from todo_api.schemas import TokenData
+from todo_api.settings import Settings
 
 settings = Settings()
 
