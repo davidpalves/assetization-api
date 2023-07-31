@@ -9,12 +9,17 @@ jobs:
       - name: Copia os arquivos do repo
         uses: actions/checkout@v3
 
-      - name: Cria arquivo .env
-        env:
-          PROD_ENV_FILE: ${{ secrets.QA_ENV_FILE }}
-        run: |
-          echo $QA_ENV_FILE | base64 --decode > .env
-          cat .env >> $GITHUB_OUTPUT
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v2.0.2
+        with:
+          envkey_DEBUG: false
+          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          envkey_DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          envkey_ALGORITHM: ${{ secrets.ALGORITHM }}
+          envkey_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
+          file_name: .env
+          fail_on_empty: false
+          sort_keys: false
 
       - name: Instalar o python
         uses: actions/setup-python@v4
