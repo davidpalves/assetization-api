@@ -1,7 +1,7 @@
 name: Fly Deploy
 on:
   workflow_run:
-    workflows: ["Pipeline"]
+    workflows: ["Tests"]
     branches: [main]
     types: 
       - completed
