@@ -1,3 +1,5 @@
+import os
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -14,13 +16,14 @@ class Settings(BaseSettings):
 
 
 class ProductionSettings(BaseSettings):
-    DATABASE_URL: str
-    SECRET_KEY: str
-    ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int
-    ENVIRONMENT: str
+    DATABASE_URL: str = os.getenv('DATABASE_URL')
+    SECRET_KEY: str = os.getenv('SECRET_KEY')
+    ALGORITHM: str = os.getenv('ALGORITHM')
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv('ACCESS_TOKEN_EXPIRE_MINUTES')
+    ENVIRONMENT: str = os.getenv('ENVIRONMENT')
 
 
-settings = Settings()
-if Settings().ENVIRONMENT == 'PRODUCTION':
+if Settings().ENVIRONMENT == 'DEVELOPMENT':
+    settings = Settings()
+else:
     settings = ProductionSettings()

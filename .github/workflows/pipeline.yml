@@ -1,4 +1,4 @@
-name: Run Tests
+name: Pipeline
 on: [push, pull_request]
 
 jobs:
@@ -12,10 +12,10 @@ jobs:
       - name: Create .env file
         uses: SpicyPizza/create-envfile@v2.0.2
         with:
-          envkey_DATABASE_URL: "sqlite:///database.db"
-          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY || 'ultra-secret-key'}}
-          envkey_ENVIRONMENT: ${{ vars.ENVIRONMENT || 'DEVELOPMENT'}}
-          envkey_ALGORITHM: ${{ vars.ALGORITHM || 'HS256'}}
+          envkey_DATABASE_URL: ${{ vars.DATABASE_URL }}
+          envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          envkey_ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+          envkey_ALGORITHM: ${{ vars.ALGORITHM }}
           envkey_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ vars.ACCESS_TOKEN_EXPIRE_MINUTES || 30 }}
           file_name: .env
           fail_on_empty: false
@@ -44,3 +44,19 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Build and push Docker image to Fly.io
+        on:
+          push:
+            branches:
+              - main
+        jobs:
+          deploy:
+            name: Deploy app
+            runs-on: ubuntu-latest
+            steps:
+              - uses: actions/checkout@v3
+              - uses: superfly/flyctl-actions/setup-flyctl@master
+              - run: flyctl deploy --remote-only
+                env:
+                  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
