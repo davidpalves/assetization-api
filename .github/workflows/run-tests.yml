@@ -12,7 +12,6 @@ jobs:
       - name: Create .env file
         uses: SpicyPizza/create-envfile@v2.0.2
         with:
-          envkey_DEBUG: false
           envkey_DATABASE_URL: "sqlite:///database.db"
           envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
           envkey_ALGORITHM: ${{ vars.ALGORITHM }}
@@ -34,8 +33,7 @@ jobs:
 
       - name: Lint with Ruff
         run: |
-          pip install ruff
-          ruff --format=github --target-version=py37 .
+          poetry run ruff --format=github --target-version=py37 .
         continue-on-error: true
 
       - name: Run tests
