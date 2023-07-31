@@ -9,6 +9,14 @@ jobs:
       - name: Copia os arquivos do repo
         uses: actions/checkout@v3
 
+      - name: Do Something with env files
+        env:
+          QA_ENV_FILE: ${{ secrets.QA_ENV_FILE }}
+          PROD_ENV_FILE: ${{ secrets.PROD_ENV_FILE }}
+        run: |
+          [ "$YOUR_ENVIRONMENT" = qa ] && echo $QA_ENV_FILE | base64 --decode > .env
+          [ "$YOUR_ENVIRONMENT" = prod ] && echo $PROD_ENV_FILE | base64 --decode > .env
+
       - name: Instalar o python
         uses: actions/setup-python@v4
         with:
