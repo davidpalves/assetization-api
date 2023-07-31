@@ -14,9 +14,9 @@ jobs:
         with:
           envkey_DEBUG: false
           envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          envkey_DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          envkey_ALGORITHM: ${{ secrets.ALGORITHM }}
-          envkey_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
+          envkey_DATABASE_URL: ${{ vars.DATABASE_URL }}
+          envkey_ALGORITHM: ${{ vars.ALGORITHM }}
+          envkey_ACCESS_TOKEN_EXPIRE_MINUTES: ${{ vars.ACCESS_TOKEN_EXPIRE_MINUTES || 30 }}
           file_name: .env
           fail_on_empty: false
           sort_keys: false
