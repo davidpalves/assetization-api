@@ -6,7 +6,21 @@ class Settings(BaseSettings):
         env_file='.env', env_file_encoding='utf-8'
     )
 
+    DATABASE_URL: str | None
+    SECRET_KEY: str | None
+    ALGORITHM: str | None
+    ACCESS_TOKEN_EXPIRE_MINUTES: int | None
+    ENVIRONMENT: str | None
+
+
+class ProductionSettings(BaseSettings):
     DATABASE_URL: str
     SECRET_KEY: str
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
+    ENVIRONMENT: str
+
+
+settings = Settings()
+if Settings().ENVIRONMENT == 'PRODUCTION':
+    settings = ProductionSettings()
