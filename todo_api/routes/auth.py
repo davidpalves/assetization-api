@@ -13,6 +13,7 @@ from todo_api.security import create_access_token, get_current_user
 router = APIRouter(tags=['token'])
 
 OAuth2Form = Annotated[OAuth2PasswordRequestForm, Depends()]
+
 Session = Annotated[Session, Depends(get_session)]
 
 
