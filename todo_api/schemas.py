@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, EmailStr
 
-from todo_api.models import TodoState
+from todo_api.models.todos import TodoState
 
 
 class UserSchema(BaseModel):

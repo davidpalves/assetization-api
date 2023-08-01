@@ -1,7 +1,10 @@
 from enum import Enum
 
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from todo_api.models.base import Base
+from todo_api.models.users import User
 
 
 class TodoState(str, Enum):
@@ -10,23 +13,6 @@ class TodoState(str, Enum):
     doing = 'doing'
     done = 'done'
     trash = 'trash'
-
-
-class Base(DeclarativeBase):
-    pass
-
-
-class User(Base):
-    __tablename__ = 'users'
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    username: Mapped[str]
-    password: Mapped[str]
-    email: Mapped[str]
-
-    todos: Mapped[list['Todo']] = relationship(
-        back_populates='user', cascade='all, delete-orphan'
-    )
 
 
 class Todo(Base):

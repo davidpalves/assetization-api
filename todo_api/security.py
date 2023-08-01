@@ -8,7 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from todo_api.database import get_session
-from todo_api.models import User
+from todo_api.models.users import User
 from todo_api.schemas import TokenData
 from todo_api.settings import settings
 
@@ -28,14 +28,6 @@ def create_access_token(data: dict):
         to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
     )
     return encoded_jwt
-
-
-def get_password_hash(password: str):
-    return pwd_context.hash(password)
-
-
-def verify_password(plain_password: str, hashed_password: str):
-    return pwd_context.verify(plain_password, hashed_password)
 
 
 async def get_current_user(

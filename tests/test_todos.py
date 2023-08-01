@@ -1,5 +1,5 @@
 from tests.factories import TodoFactory
-from todo_api.models import TodoState
+from todo_api.models.todos import TodoState
 
 
 def test_create_todo(client, token):

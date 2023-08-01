@@ -6,13 +6,9 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from todo_api.database import get_session
-from todo_api.models import User
+from todo_api.models.users import User
 from todo_api.schemas import Token
-from todo_api.security import (
-    create_access_token,
-    get_current_user,
-    verify_password,
-)
+from todo_api.security import create_access_token, get_current_user
 
 router = APIRouter(tags=['token'])
 
@@ -29,7 +25,7 @@ def login_for_access_token(form_data: OAuth2Form, session: Session):
             status_code=400, detail='Incorrect email or password'
         )
 
-    if not verify_password(form_data.password, user.password):
+    if not user.verify_password(form_data.password, user.password):
         raise HTTPException(
             status_code=400, detail='Incorrect email or password'
         )

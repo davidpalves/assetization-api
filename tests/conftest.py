@@ -7,8 +7,7 @@ from sqlalchemy.pool import StaticPool
 from tests.factories import UserFactory
 from todo_api.app import app
 from todo_api.database import get_session
-from todo_api.models import Base
-from todo_api.security import get_password_hash
+from todo_api.models.base import Base
 
 
 @pytest.fixture
@@ -42,7 +41,7 @@ def user(session):
     user = UserFactory(
         username='miles',
         email='miles@morales.com',
-        password=get_password_hash(password),
+        password=password,
     )
 
     session.add(user)
@@ -57,7 +56,7 @@ def user(session):
 @pytest.fixture
 def user2(session):
     password = 'spidey'
-    user = UserFactory(password=get_password_hash(password))
+    user = UserFactory(password=password)
 
     session.add(user)
     session.commit()

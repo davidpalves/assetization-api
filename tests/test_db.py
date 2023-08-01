@@ -1,7 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from todo_api.models import Todo, User
+from todo_api.models.todos import Todo
+from todo_api.models.users import User
 
 
 def test_create_user(session):

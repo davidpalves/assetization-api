@@ -5,9 +5,9 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from todo_api.database import get_session
-from todo_api.models import User
+from todo_api.models.users import User
 from todo_api.schemas import Message, UserList, UserPublic, UserSchema
-from todo_api.security import get_current_user, get_password_hash
+from todo_api.security import get_current_user
 
 Session = Annotated[Session, Depends(get_session)]
 CurrentUser = Annotated[User, Depends(get_current_user)]
@@ -26,10 +26,8 @@ def create_user(user: UserSchema, session: Session):
             status_code=400, detail='Username already registered'
         )
 
-    hashed_password = get_password_hash(user.password)
-
     db_user = User(
-        username=user.username, password=hashed_password, email=user.email
+        username=user.username, password=user.password, email=user.email
     )
     session.add(db_user)
     session.commit()
