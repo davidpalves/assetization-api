@@ -1,12 +1,10 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
-from todo_api.settings import settings
-from todo_api.models import *
+from sqlalchemy import engine_from_config, pool
 
+from todo_api.models import *
+from todo_api.settings import settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
