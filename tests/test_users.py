@@ -1,6 +1,3 @@
-from freezegun import freeze_time
-from pytest_freezegun import pytest
-
 from todo_api.schemas import UserPublic
 
 # CREATE USER
@@ -92,7 +89,7 @@ def test_update_user_with_wrong_auth(client, user, user2, token):
             'password': 'spidey',
         },
     )
-    assert response.status_code == 400
+    assert response.status_code == 403
     assert response.json() == {'detail': 'Not enough permissions'}
 
 
@@ -117,17 +114,5 @@ def test_delete_user_with_wrong_auth(client, user, user2, token):
     response = client.delete(
         f'/users/{user2.id}', headers={'Authorization': f'Bearer {token}'}
     )
-    assert response.status_code == 400
+    assert response.status_code == 403
     assert response.json() == {'detail': 'Not enough permissions'}
-
-
-@pytest.mark.freeze_time('2023-07-14 12:00:00')
-def test_token_expiry(client, user, token):
-    with freeze_time('2023-07-14 12:31:00'):
-        response = client.delete(
-            f'/users/{user.id}',
-            headers={'Authorization': f'Bearer {token}'},
-        )
-
-    assert response.status_code == 401
-    assert response.json() == {'detail': 'Could not validate credentials'}

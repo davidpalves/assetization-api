@@ -1,15 +1,15 @@
-"""Update tables to have timestamp fields
+"""set email as unique field
 
-Revision ID: 51f5237bab5e
+Revision ID: 3472f909441f
 Revises: 
-Create Date: 2023-08-01 14:58:40.671585
+Create Date: 2023-08-01 22:39:24.378765
 
 """
 import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = '51f5237bab5e'
+revision = '3472f909441f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,8 @@ def upgrade() -> None:
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email')
     )
     op.create_table('todos',
     sa.Column('id', sa.Integer(), nullable=False),

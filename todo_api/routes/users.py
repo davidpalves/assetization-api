@@ -17,9 +17,7 @@ router = APIRouter(prefix='/users', tags=['users'])
 
 @router.post('/', response_model=UserPublic, status_code=201)
 def create_user(user: UserSchema, session: Session):
-    db_user = session.scalar(
-        select(User).where(User.username == user.username)
-    )
+    db_user = session.scalar(select(User).where(User.email == user.email))
 
     if db_user:
         raise HTTPException(
@@ -46,14 +44,25 @@ def list_users(session: Session, skip: int = 0, limit: int = 100):
 def update_user(
     user_id: int, user: UserSchema, session: Session, current_user: CurrentUser
 ):
-    if current_user.id != user_id:
-        raise HTTPException(status_code=400, detail='Not enough permissions')
+    updatedUser = User(**user.model_dump())
 
-    current_user.username = user.username
-    current_user.password = user.password
-    current_user.email = user.email
-    session.commit()
-    session.refresh(current_user)
+    if current_user.id != user_id:
+        raise HTTPException(status_code=403, detail='Not enough permissions')
+
+    current_user.username = updatedUser.username
+    current_user.email = updatedUser.email
+    current_user.password = updatedUser.password
+
+    try:
+        session.commit()
+        session.refresh(current_user)
+    except Exception:
+        raise HTTPException(
+            status_code=400,
+            detail="""
+            This email address is not available. Choose a different address.
+            """,
+        )
 
     return current_user
 
@@ -65,7 +74,7 @@ def delete_user(
     current_user: CurrentUser,
 ):
     if current_user.id != user_id:
-        raise HTTPException(status_code=400, detail='Not enough permissions')
+        raise HTTPException(status_code=403, detail='Not enough permissions')
 
     session.delete(current_user)
     session.commit()

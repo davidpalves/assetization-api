@@ -31,7 +31,6 @@ ipython = "^8.14.0"
 ipdb = "^0.13.13"
 factory-boy = "^3.3.0"
 freezegun = "^1.2.2"
-pytest-freezegun = "^0.4.2"
 
 [tool.ruff]
 line-length = 79

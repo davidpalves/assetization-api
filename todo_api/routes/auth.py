@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from todo_api.database import get_session
 from todo_api.models.users import User
-from todo_api.schemas import Token
+from todo_api.schemas.auth import Token
 from todo_api.security import create_access_token, get_current_user
 
 router = APIRouter(tags=['token'])
