@@ -5,9 +5,10 @@ from typing import TYPE_CHECKING
 from passlib.context import CryptContext
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from todo_api.models.base import Base, timestamp, updated_timestamp
+from todo_api.models.base import Base, timestamp, update_timestamp
 
 if TYPE_CHECKING:
+    from todo_api.models.assets import Asset
     from todo_api.models.todos import Todo
 
 
@@ -27,9 +28,13 @@ class User(Base):
     password: Mapped[str]
     email: Mapped[str] = mapped_column(unique=True)
     created_at: Mapped[timestamp]
-    updated_at: Mapped[updated_timestamp]
+    updated_at: Mapped[update_timestamp]
 
     todos: Mapped[list[Todo]] = relationship(
+        back_populates='user', cascade='all, delete-orphan'
+    )
+
+    assets: Mapped[list[Asset]] = relationship(
         back_populates='user', cascade='all, delete-orphan'
     )
 

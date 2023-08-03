@@ -1,3 +1,4 @@
+from todo_api.schemas.assets import *  # noqa
 from todo_api.schemas.auth import *  # noqa
 from todo_api.schemas.common import *  # noqa
 from todo_api.schemas.todo import *  # noqa

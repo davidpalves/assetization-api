@@ -9,7 +9,7 @@ timestamp = Annotated[
     mapped_column(nullable=False, server_default=func.CURRENT_TIMESTAMP()),
 ]
 
-updated_timestamp = Annotated[
+update_timestamp = Annotated[
     datetime.datetime,
     mapped_column(
         nullable=False,
