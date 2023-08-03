@@ -1,4 +1,5 @@
 import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -30,11 +31,11 @@ class AssetPublic(BaseModel):
     salvage_price: float
     purchase_price: float
     lifespan_in_years: int
-    usage_time: int | None
+    usage_time: Optional[int]
     created_at: datetime.datetime
-    updated_at: datetime.datetime
-    last_action: AssetsActions | None
-    last_action_at: datetime.datetime | None
+    updated_at: Optional[datetime.datetime]
+    last_action: Optional[AssetsActions]
+    last_action_at: Optional[datetime.datetime]
     depreciation_per_year: float
     depreciable_cost: float
 
@@ -44,12 +45,12 @@ class ListAssets(BaseModel):
 
 
 class AssetUpdate(BaseModel):
-    name: str | None = None
-    description: str | None = None
-    type: AssetsTypes | None = None
-    salvage_price: float | None = None
-    purchase_price: float | None = None
-    lifespan_in_years: int | None = None
+    name: Optional[str] = None
+    description: Optional[str] = None
+    type: Optional[AssetsTypes] = None
+    salvage_price: Optional[float] = None
+    purchase_price: Optional[float] = None
+    lifespan_in_years: Optional[int] = None
 
 
 class AssetRegisterAction(BaseModel):

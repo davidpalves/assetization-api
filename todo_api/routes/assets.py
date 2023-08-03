@@ -10,6 +10,7 @@ from todo_api.models.users import User
 from todo_api.schemas import (
     AssetCreationResponse,
     AssetPublic,
+    AssetRegisterAction,
     AssetSchema,
     AssetUpdate,
     ListAssets,
@@ -106,3 +107,26 @@ def delete_asset(asset_id: int, session: Session, user: CurrentUser):
     session.commit()
 
     return {'detail': 'Asset has been deleted successfully.'}
+
+
+@router.post('/{asset_id}/register_action', response_model=AssetPublic)
+def register_asset_action(
+    asset_id: int,
+    session: Session,
+    user: CurrentUser,
+    asset: AssetRegisterAction,
+):
+    db_asset = session.scalar(
+        select(Asset).where(Asset.user_id == user.id, Asset.id == asset_id)
+    )
+
+    if not db_asset:
+        raise HTTPException(status_code=404, detail='Asset not found.')
+
+    db_asset.register_usage(action=asset.action)
+
+    session.add(db_asset)
+    session.commit()
+    session.refresh(db_asset)
+
+    return db_asset

@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from todo_api.models.assets import Asset
 from todo_api.models.todos import Todo
 from todo_api.models.users import User
 
@@ -32,3 +33,23 @@ def test_create_todo(session: Session, user: User):
     user = session.scalar(select(User).where(User.id == user.id))
 
     assert todo in user.todos
+
+
+def test_create_asset(session: Session, user: User):
+    asset = Asset(
+        name='Test Todo',
+        description='Test Desc',
+        type='lamp',
+        salvage_price=500,
+        purchase_price=20000,
+        lifespan_in_years=15,
+        user_id=user.id,
+    )
+
+    session.add(asset)
+    session.commit()
+    session.refresh(asset)
+
+    user = session.scalar(select(User).where(User.id == user.id))
+
+    assert asset in user.assets

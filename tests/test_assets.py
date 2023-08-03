@@ -1,3 +1,5 @@
+from freezegun import freeze_time
+
 from tests.factories import AssetFactory
 from todo_api.models.assets import AssetsTypes
 
@@ -143,3 +145,36 @@ def test_delete_todo_error(client, token):
 
     assert response.status_code == 404
     assert response.json() == {'detail': 'Asset not found.'}
+
+
+@freeze_time('2023-08-03 12:00:00')
+def test_register_asset_action(session, client, user, token):
+    asset = AssetFactory(user_id=user.id)
+
+    session.add(asset)
+    session.commit()
+
+    response = client.post(
+        f'/assets/{asset.id}/register_action',
+        json={'action': 'turn on'},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == 200
+    assert response.json()['last_action'] == 'turn on'
+    assert response.json()['last_action_at'] == '2023-08-03T12:00:00'
+
+
+def test_register_asset_action_returns_404(session, client, user, token):
+    asset = AssetFactory(user_id=user.id)
+
+    session.add(asset)
+    session.commit()
+
+    response = client.post(
+        f'/assets/{9999999}/register_action',
+        json={'action': 'turn on'},
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == 404
