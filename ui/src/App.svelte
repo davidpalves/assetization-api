@@ -21,7 +21,7 @@
 
 <main>
 	<h1 class="list-title">Your Assets</h1>
-	<table>
+	<table class="styled-table">
 		<thead>
 		<tr>
 			{#each columns as column}
@@ -33,12 +33,12 @@
 		<tbody>
 		{#each $assetsList as row}
 			<tr>
-				<td>{row.id}</td>
+				<td>#{row.id}</td>
 				<td>{row.name}</td>
 				<td>{row.description}</td>
 				<td>{row.type}</td>
 				<td><Time timestamp={row.created_at} /></td>
-				<td>{row.lifespan_in_years}</td>
+				<td>{row.lifespan_in_years} years</td>
 			</tr>
 		{/each}
 		</tbody>
@@ -56,30 +56,49 @@
 		border-radius: 5px;
 	}
 
-	th, td {
-		padding: 20px;
-	}
-
 	.list-title {
 		margin-bottom: 15vh;
+		color: #009879;
 	}
 
-	th {
-  		letter-spacing: 2px;
-		background-color: #53a25c;
-		color: #000000;
+	.styled-table {
+		border-collapse: collapse;
+		margin: 25px 0;
+		font-size: 0.9em;
+		font-family: sans-serif;
+		min-width: 400px;
+		box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 	}
 
 	td {
 		letter-spacing: 1px;
 	}
 	
-	thead tr {
-		border-bottom: 1px solid black;
+	.styled-table thead tr {
+		background-color: #009879;
+		color: #ffffff;
+		text-align: left;
 	}
 	
 	tbody td {
-		text-align: center;
+		text-align: left;
 		border-bottom: 1px solid black;
+	}
+
+	.styled-table th,
+	.styled-table td {
+		padding: 12px 15px;
+	}
+
+	.styled-table tbody tr {
+    	border-bottom: 1px solid #dddddd;
+	}
+
+	.styled-table tbody tr:nth-of-type(even) {
+		background-color: #f3f3f3;
+	}
+
+	.styled-table tbody tr:last-of-type {
+		border-bottom: 2px solid #009879;
 	}
 </style>
