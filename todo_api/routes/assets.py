@@ -50,14 +50,14 @@ def create_asset(
 @router.get('/', response_model=ListAssets)
 def list_assets(
     session: Session,
-    user: CurrentUser,
+    # user: CurrentUser,
     name: str = Query(None),
     description: str = Query(None),
     type: str = Query(None),
     offset: int = Query(None),
     limit: int = Query(None),
 ):
-    query = select(Asset).where(Asset.user_id == user.id)
+    query = select(Asset).where()
 
     if name:
         query = query.filter(Asset.name.contains(name))

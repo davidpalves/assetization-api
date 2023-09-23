@@ -25,6 +25,7 @@ class AssetCreationResponse(BaseModel):
 
 
 class AssetPublic(BaseModel):
+    id: int
     name: str
     description: str
     type: AssetsTypes
