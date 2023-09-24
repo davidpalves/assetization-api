@@ -3,6 +3,7 @@
 	import Time from "svelte-time";
 
 	import { apiData, assetsList } from "../src/store.js"
+	import Navbar from "../src/components/Navbar.svelte"
 
 	onMount(async () => {
 		fetch("http://localhost:8000/assets")
@@ -20,6 +21,7 @@
 </script>
 
 <main>
+	<Navbar></Navbar>
 	<h1 class="list-title">Your Assets</h1>
 	<table class="styled-table">
 		<thead>
@@ -57,7 +59,7 @@
 	}
 
 	.list-title {
-		margin-bottom: 15vh;
+		margin-bottom: 10vh;
 		color: #009879;
 	}
 
@@ -101,4 +103,5 @@
 	.styled-table tbody tr:last-of-type {
 		border-bottom: 2px solid #009879;
 	}
+
 </style>
